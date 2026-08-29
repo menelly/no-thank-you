@@ -15,6 +15,25 @@ Passkeys are pitched as security. For most of the sites that push them hardest, 
 
 Somebody hijacking your utility account is a bummer. It does not need biometrics. You are allowed to keep using a password.
 
+### Authentication should be proportional to what's behind the door
+
+We are not against strong auth. Your **email** is the master key — every password reset on earth
+flows through it — so lock that down with everything you've got. Your **bank**, same. Fine. Yes.
+
+But the threat model for the **light bill** is "a stranger pays it for you." That is not an attack.
+Nobody is stealing your car-payment login to *give the lender money*. Forcing a phone-bound
+credential onto those accounts protects against a threat that doesn't exist, and it pays for that
+non-protection with a very real new failure mode: **the phone.** Phones break. Phones have no signal
+in the parking garage, or in the rural county where the utility office actually is. Phones get shut
+off because the bill is overdue — which is exactly when you need to log in and pay it. A smartphone
+with live data service is not infrastructure everybody has, and a login flow that assumes it is has
+just decided who gets to be a customer.
+
+So this extension is a **consumer-choice** tool. You read the risk, you understood the tradeoff, and
+you decided a password is the right lock for *this* door. That is an informed decision, and a
+consent step that only offers a "yes" button is not a consent step — it's a confirmation step in a
+consent costume. "No Thank You" just puts the *no* back on the menu.
+
 ## What it does
 
 1. **`page-hook.js`** (runs in the page before the site's own scripts): wraps `navigator.credentials.get/create` so any `publicKey` (WebAuthn) request rejects with `NotSupportedError`, and reports `isUserVerifyingPlatformAuthenticatorAvailable()` / `isConditionalMediationAvailable()` as `false`. Well-behaved sites then show their password form. Password-manager and federated credential calls are untouched.
