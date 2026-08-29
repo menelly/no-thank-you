@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "No Thank You",
+  "version": "0.1.0",
+  "description": "Declines passkey enrollment and passkey-only sign-in prompts on your behalf, so sites fall back to the password login you asked for. Not everybody has a smartphone. Not everybody has two working hands.",
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["page-hook.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "No Thank You — passkeys declined"
+  }
+}
