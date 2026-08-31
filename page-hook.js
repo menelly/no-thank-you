@@ -53,10 +53,13 @@
       "isConditionalMediationAvailable",
     ]) {
       try {
-        // Non-configurable on purpose: other extensions (looking at you, Okta
-        // FastPass) re-override these to force-return true AFTER document_start.
-        // First writer wins when the property can't be redefined. Found live on
-        // webauthn.io 2026-08-31: our false was replaced by ()=>Promise.resolve(!0).
+        // Non-configurable on purpose: password managers' passkey shims
+        // (RoboForm, in the observed case) re-override these to force-return
+        // true AFTER document_start, so sites offer passkey flows the manager
+        // can intercept. First writer wins when the property can't be redefined.
+        // Found live on webauthn.io 2026-08-31: our false was replaced by a
+        // minified ()=>Promise.resolve(!0). (Okta was suspected first; it was
+        // disabled the whole time. Convict on evidence, not reputation.)
         Object.defineProperty(window.PublicKeyCredential, name, {
           value: no, writable: false, configurable: false,
         });
