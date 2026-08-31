@@ -13,6 +13,8 @@
 
 (() => {
   if (!navigator.credentials) return;
+  window.__noThankYouVersion = "0.1.2";
+  console.info("[No Thank You] v0.1.2 page-hook active on", location.host);
 
   const notSupported = (what) => {
     const err = new DOMException(
