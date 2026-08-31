@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "No Thank You",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Declines passkey enrollment and passkey-only sign-in prompts on your behalf, so sites fall back to the password login you asked for. Not everybody has a smartphone. Not everybody has two working hands.",
   "permissions": ["storage"],
   "host_permissions": ["<all_urls>"],

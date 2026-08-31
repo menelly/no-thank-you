@@ -13,8 +13,8 @@
 
 (() => {
   if (!navigator.credentials) return;
-  window.__noThankYouVersion = "0.1.2";
-  console.info("[No Thank You] v0.1.2 page-hook active on", location.host);
+  window.__noThankYouVersion = "0.1.3";
+  console.info("[No Thank You] v0.1.3 page-hook active on", location.host);
 
   const notSupported = (what) => {
     const err = new DOMException(
@@ -53,8 +53,12 @@
       "isConditionalMediationAvailable",
     ]) {
       try {
+        // Non-configurable on purpose: other extensions (looking at you, Okta
+        // FastPass) re-override these to force-return true AFTER document_start.
+        // First writer wins when the property can't be redefined. Found live on
+        // webauthn.io 2026-08-31: our false was replaced by ()=>Promise.resolve(!0).
         Object.defineProperty(window.PublicKeyCredential, name, {
-          value: no, writable: true, configurable: true,
+          value: no, writable: false, configurable: false,
         });
       } catch (_) { /* frozen in some browser; the get/create hooks still hold */ }
     }
