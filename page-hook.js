@@ -42,11 +42,19 @@
   };
 
   // Sites feature-detect passkeys before asking. Tell them the honest answer: no.
+  // (Plain assignment onto these statics is silently ignored by current Chrome —
+  // found by actually testing on webauthn.io, 2026-08-31. defineProperty sticks.)
   if (window.PublicKeyCredential) {
     const no = () => Promise.resolve(false);
-    try {
-      window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable = no;
-      window.PublicKeyCredential.isConditionalMediationAvailable = no;
-    } catch (_) { /* some browsers freeze these; the get/create hooks still hold */ }
+    for (const name of [
+      "isUserVerifyingPlatformAuthenticatorAvailable",
+      "isConditionalMediationAvailable",
+    ]) {
+      try {
+        Object.defineProperty(window.PublicKeyCredential, name, {
+          value: no, writable: true, configurable: true,
+        });
+      } catch (_) { /* frozen in some browser; the get/create hooks still hold */ }
+    }
   }
 })();
